@@ -1,8 +1,16 @@
-## sbt project compiled with Scala 3
+## bookamanger
 
-### Usage
+### 使い方
 
-This is a normal sbt project. You can compile code with `sbt compile`, run it with `sbt run`, and `sbt console` will start a Scala 3 REPL.
+以下のコマンドで実行
+```shell
+sbt run 
+```
 
-For more information on the sbt-dotty plugin, see the
-[scala3-example-project](https://github.com/scala/scala3-example-project/blob/main/README.md).
+### 現在有効なエンドポイント
+
+- `/api/book/isdn/{isdn}`
+  - 指定したisdnの書誌情報を取得
+
+- `/api/book/isbn/{isbn}`
+  - 指定したisbnの書誌情報を取得
