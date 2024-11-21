@@ -24,7 +24,8 @@ lazy val root = project
     "org.atnos" %% "eff" % "5.21.0",
     "org.typelevel" %% "cats-effect" % "3.5.6",
     "org.typelevel" %% "log4cats-slf4j"   % "2.7.0",
-    "ch.qos.logback" % "logback-classic" % "1.5.12"
+    "ch.qos.logback" % "logback-classic" % "1.5.12",
+    "org.scalatest" %% "scalatest" % "3.2.19" % Test
     )
   )
 
