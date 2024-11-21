@@ -16,7 +16,7 @@ case class OpenBDResponse(summary: Option[Summary])
 class OpenBDFetcher(httpClient: Client[IO]) extends BookMetadataFetcher[IO, ByIdentifier] {
   private val baseUrl = "https://api.openbd.jp/v1/get"
 
-  override def fetch(identifier: ByIdentifier): IO[NonEmptyList[Book]] = {
+  override def fetch(identifier: ByIdentifier): IO[List[Book]] = {
     val requestUri = Uri.unsafeFromString(s"$baseUrl?isbn=${Identifier.value(identifier.identifier)}")
 
     // HTTPリクエストを作成
@@ -31,7 +31,7 @@ class OpenBDFetcher(httpClient: Client[IO]) extends BookMetadataFetcher[IO, ById
 
       // レスポンスを解析して書籍データを生成
       book <- processResponse(response, identifier.identifier) match {
-        case Right(b) => IO.pure(NonEmptyList.one(b))
+        case Right(b) => IO.pure(List(b))
         case Left(err) => IO.raiseError(new RuntimeException(err))
       }
     } yield book

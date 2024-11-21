@@ -1,7 +1,7 @@
 package main
 
 import application.BookRoutes
-import infra.fetchers.OpenBDFetcher
+import infra.fetchers.{OpenBDFetcher, ISDNMetadataFetcher}
 import org.http4s.blaze.client.BlazeClientBuilder
 import org.http4s.blaze.server.BlazeServerBuilder
 import cats.effect._
@@ -16,16 +16,28 @@ object Main extends IOApp {
     val clientResource = BlazeClientBuilder[IO](global).resource
 
     clientResource.use { httpClient =>
-      val fetcher = new OpenBDFetcher(httpClient)
-      val bookRoutes = new BookRoutes(fetcher)
+      for {
+        // ロガーの初期化
+        logger: Logger[IO] <- Slf4jLogger.create[IO]
 
-      BlazeServerBuilder[IO](global)
-        .bindHttp(8080, "0.0.0.0")
-        .withHttpApp(bookRoutes.httpRoutes.orNotFound)
-        .serve
-        .compile
-        .drain
-        .as(ExitCode.Success)
+        // 各フェッチャーのインスタンスを作成
+        isbnFetcher = new OpenBDFetcher(httpClient)
+        isdnFetcher = new ISDNMetadataFetcher(httpClient)
+
+        // ルートの設定
+        bookRoutes = new BookRoutes(isbnFetcher, isdnFetcher)
+
+        // サーバーの起動
+        _ <- logger.info("Starting HTTP server on http://localhost:8080")
+        exitCode <- BlazeServerBuilder[IO](global)
+          .bindHttp(8080, "0.0.0.0")
+          .withHttpApp(bookRoutes.httpRoutes.orNotFound)
+          .serve
+          .compile
+          .drain
+          .as(ExitCode.Success)
+        _ <- logger.info("HTTP server stopped")
+      } yield exitCode
     }
   }
 }

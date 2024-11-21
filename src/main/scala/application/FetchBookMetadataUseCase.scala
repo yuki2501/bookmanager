@@ -11,14 +11,10 @@ class FetchBookUseCase(
   isdnFetcher: BookMetadataFetcher[IO, ByIdentifier]
 ) {
 
-  def fetch(identifier: Identifier): IO[NonEmptyList[Book]] = identifier match {
-    case identifier: ByIdentifier=>
-      identifier match {
+  def fetch(identifier: ByIdentifier): IO[List[Book]] = identifier match {
         case ByIdentifier(Identifier.ISBN(x)) => isbnFetcher.fetch(ByIdentifier(Identifier.ISBN(x)))
         case ByIdentifier(Identifier.ISDN(x)) => isdnFetcher.fetch(ByIdentifier(Identifier.ISBN(x)))
-      }
-    case Identifier.Unknown(value) =>
-      IO.raiseError(new RuntimeException(s"Unsupported identifier type: $value"))
+    case _ => IO.raiseError(new RuntimeException("Unsupported identifier type"))
   }
 }
 
