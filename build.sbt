@@ -25,7 +25,12 @@ lazy val root = project
     "org.typelevel" %% "cats-effect" % "3.5.6",
     "org.typelevel" %% "log4cats-slf4j"   % "2.7.0",
     "ch.qos.logback" % "logback-classic" % "1.5.12",
-    "org.scalatest" %% "scalatest" % "3.2.19" % Test
+    "org.scalatest" %% "scalatest" % "3.2.19" % Test,
+    "com.typesafe.slick" %% "slick" % "3.5.1",
+    "org.slf4j" % "slf4j-nop" % "1.7.26",
+    "com.h2database" % "h2" % "1.4.200",
+    "com.typesafe.slick" %% "slick-hikaricp" % "3.5.1",
+    "com.typesafe" % "config" % "1.4.3"
     )
   )
 

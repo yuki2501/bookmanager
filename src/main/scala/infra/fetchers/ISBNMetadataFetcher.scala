@@ -48,11 +48,11 @@ class OpenBDFetcher(httpClient: Client[IO]) extends BookMetadataFetcher[IO, ById
         val language = None
         Right(
           Book(
-            id = 0,
+            id = java.util.UUID.randomUUID(),
             title = title.getOrElse("No Title"),
-            author = author.getOrElse("No Author"), // Author情報はスキーマにないため、必要に応じて追加
+            author = author.getOrElse("No Author"),             
             bibliographicIdentifier = None,
-            publishedYear = 0, // PublishedYearの取得処理を追加する場合はここに記載
+            publishedYear = None, 
             description = language.map(l => s"Language: $l"),
             storageLocation = None,
             categories = Set.empty

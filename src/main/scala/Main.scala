@@ -1,7 +1,7 @@
 package main
 
 import application.BookRoutes
-import infra.fetchers.{OpenBDFetcher, ISDNMetadataFetcher}
+import infra.fetchers.{OpenBDFetcher, ISDNMetadataFetcher, ISSNMetadataFetcher}
 import org.http4s.blaze.client.BlazeClientBuilder
 import org.http4s.blaze.server.BlazeServerBuilder
 import cats.effect._
@@ -23,9 +23,10 @@ object Main extends IOApp {
         // 各フェッチャーのインスタンスを作成
         isbnFetcher = new OpenBDFetcher(httpClient)
         isdnFetcher = new ISDNMetadataFetcher(httpClient)
+        issnFetcher = new ISSNMetadataFetcher(httpClient)
 
         // ルートの設定
-        bookRoutes = new BookRoutes(isbnFetcher, isdnFetcher)
+        bookRoutes = new BookRoutes(isbnFetcher, isdnFetcher,issnFetcher)
 
         // サーバーの起動
         _ <- logger.info("Starting HTTP server on http://localhost:8080")

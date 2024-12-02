@@ -58,16 +58,18 @@ class ISDNMetadataFetcher(httpClient: Client[IO]) extends BookMetadataFetcher[IO
     val publishedYear = (item \ "issue-date").text.take(4).toIntOption.getOrElse(0)
 
     Book(
-      id = 0, // IDは生成時にDB側で付与されると仮定
+      id = java.util.UUID.randomUUID(), // IDは生成時にDB側で付与されると仮定
       title = title,
       author = if (author.isEmpty) "Unknown" else author,
       bibliographicIdentifier = Some(identifier),
-      publishedYear = publishedYear,
+      publishedYear = Some(publishedYear),
       description = description,
       storageLocation = None, // 必要に応じて変更
       categories = categories
     )
   }
+
+  //TODO: Remove this test
   val mockXmlString = """
   <isdn xsi:schemaLocation="https://isdn.jp/schemas/0.1 https://isdn.jp/schemas/0.1/isdn.xsd">
   <item key="2784506208037">
@@ -108,7 +110,7 @@ class ISDNMetadataFetcher(httpClient: Client[IO]) extends BookMetadataFetcher[IO
 """
   assert(parseBooks(secureXML.loadString(mockXmlString),Identifier.ISDN("2784506208037")).head.title == "カモガワGブックスVol.3 〈未来の文学〉完結記念号")
   assert(parseBooks(secureXML.loadString(mockXmlString),Identifier.ISDN("2784506208037")).head.author == "一般")
-  assert(parseBooks(secureXML.loadString(mockXmlString),Identifier.ISDN("2784506208037")).head.publishedYear == 2021)
+  assert(parseBooks(secureXML.loadString(mockXmlString),Identifier.ISDN("2784506208037")).head.publishedYear == Some(2021))
 
 }
 

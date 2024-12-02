@@ -12,7 +12,8 @@ import io.circe.generic.auto._
 
 class BookRoutes(
     isbnFetcher: OpenBDFetcher,
-    isdnFetcher: ISDNMetadataFetcher
+    isdnFetcher: ISDNMetadataFetcher,
+    issnFetcher: ISSNMetadataFetcher
 ) {
 
   // エンドポイント定義
@@ -25,6 +26,10 @@ class BookRoutes(
     // ISDN用エンドポイント
     case GET -> Root / "books" / "isdn" / isdnValue =>
       fetchBook(ByIdentifier(Identifier.ISDN(isdnValue)), isdnFetcher)
+
+    // ISSN用エンドポイント
+    case GET -> Root / "books" / "issn" / issnValue =>
+      fetchBook(ByIdentifier(Identifier.ISSN(issnValue)), issnFetcher)
   }
 
   // 書籍データを取得してレスポンスを返す共通メソッド
