@@ -30,6 +30,7 @@ lazy val root = project
     "org.slf4j" % "slf4j-nop" % "1.7.26",
     "com.h2database" % "h2" % "1.4.200",
     "com.typesafe.slick" %% "slick-hikaricp" % "3.5.1",
+    "org.postgresql" % "postgresql" % "42.7.4",
     "com.typesafe" % "config" % "1.4.3"
     )
   )
